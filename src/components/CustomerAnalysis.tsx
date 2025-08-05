@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import type { Customer } from "../App";
 import { FEATURES } from "../constants/features";
-import { CLICKTHROUGH_URL, WORKSPACE_URL } from "../services/api";
+import { CLICKTHROUGH_URL, createWorkspace, WORKSPACE_URL } from "../services/api";
 import { ContractGuidebookOverlay } from "./ContractGuidebookOverlay";
 
 interface CustomerAnalysisProps {
@@ -222,23 +222,24 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
   const handleCreateDemoWorkspace = async () => {
     // TODO: Create demo workspace api call on success, redirect to the demo workspace
     setCreatingWorkspace(true);
-    await new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(true);
-        createWorkspaceConfig.company_name = customer.company_name;
-        createWorkspaceConfig.company_email_domains = customer.mail_domain
-          ? [customer.mail_domain]
-          : ["yopmail.com"];
-        createWorkspaceConfig.invited_users = invitedUsers;
-        createWorkspaceConfig.feature_list = selectedProducts;
-        createWorkspaceConfig.demo_access_end_date = new Date(
-          new Date().setDate(new Date().getDate() + 30)
-        )
-          .toISOString()
-          .split("T")[0];
-        createWorkspaceConfig.create_dummy_data = true;
-      }, 3000)
-    );
+    try {
+      createWorkspaceConfig.company_name = customer.company_name;
+      createWorkspaceConfig.company_email_domains = customer.mail_domain
+        ? [customer.mail_domain]
+        : ["yopmail.com"];
+      createWorkspaceConfig.invited_users = invitedUsers;
+      createWorkspaceConfig.feature_list = selectedProducts;
+      createWorkspaceConfig.demo_access_end_date = new Date(
+        new Date().setDate(new Date().getDate() + 30)
+      )
+        .toISOString()
+        .split("T")[0];
+      createWorkspaceConfig.create_dummy_data = true;
+      const response = await createWorkspace(createWorkspaceConfig);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
     setCreatingWorkspace(false);
     setCurrentStep("preview");
   };
@@ -331,25 +332,23 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                   <div
                     className={`
                     w-8 h-8 rounded-full flex items-center justify-center
-                    ${
-                      isActive
+                    ${isActive
                         ? "bg-blue-600 text-white"
                         : isCompleted
-                        ? "bg-green-600 text-white"
-                        : "bg-slate-200 text-slate-500"
-                    }
+                          ? "bg-green-600 text-white"
+                          : "bg-slate-200 text-slate-500"
+                      }
                   `}
                   >
                     <Icon className="w-4 h-4" />
                   </div>
                   <span
-                    className={`ml-2 text-sm font-medium ${
-                      isActive
+                    className={`ml-2 text-sm font-medium ${isActive
                         ? "text-blue-600"
                         : isCompleted
-                        ? "text-green-600"
-                        : "text-slate-500"
-                    }`}
+                          ? "text-green-600"
+                          : "text-slate-500"
+                      }`}
                   >
                     {step.label}
                   </span>
@@ -426,11 +425,10 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                         onChange={(e) => setPainPointInput(e.target.value)}
                       />
                       <button
-                        className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${
-                          !painPointInput.trim()
+                        className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${!painPointInput.trim()
                             ? "opacity-50 cursor-not-allowed"
                             : ""
-                        }`}
+                          }`}
                         onClick={onAddPainPointClick}
                         disabled={!painPointInput.trim()}
                       >
@@ -739,11 +737,10 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                             e.currentTarget.value = "";
                           }
                         }}
-                        className={`flex-1 px-3 py-2 border rounded focus:outline-none focus:ring-2 ${
-                          userInputError
+                        className={`flex-1 px-3 py-2 border rounded focus:outline-none focus:ring-2 ${userInputError
                             ? "border-red-300 focus:ring-red-500 bg-red-50"
                             : "border-slate-300 focus:ring-blue-500 bg-slate-100"
-                        }`}
+                          }`}
                       />
                     </div>
                     {userInputError && (

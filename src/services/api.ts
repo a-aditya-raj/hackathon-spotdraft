@@ -1,4 +1,5 @@
 import { Customer } from "../App";
+import { DemoConfiguration } from "../types/auth.types";
 
 const DUMMY_CUSTOMER_LIST: Customer[] = [
   {
@@ -228,3 +229,18 @@ export const CLICKTHROUGH_URL =
   "https://spotdraft-ai-signup-bridge.lovable.app/";
 
 export const WORKSPACE_URL = "http://localhost:4200/home";
+
+export const createWorkspace = async (config: DemoConfiguration) => {
+  const response = await fetch("http://localhost:8000/api/v1/workspaces", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer `,
+    },
+    body: JSON.stringify(config),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create workspace");
+  }
+  return response.json();
+};
