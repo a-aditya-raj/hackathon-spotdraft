@@ -13,7 +13,7 @@ import {
   Loader2,
 } from "lucide-react";
 import type { Customer } from "../App";
-import { FEATURES } from "../constants/features";
+import { FEATURES, SUGGESTION_LIST } from "../constants/features";
 import { CLICKTHROUGH_URL, WORKSPACE_URL } from "../services/api";
 import { ContractGuidebookOverlay } from "./ContractGuidebookOverlay";
 
@@ -543,6 +543,10 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                             <span className="text-sm text-slate-700">
                               {feature}
                             </span>
+                            <Suggestions
+                              feature={feature}
+                              customer={customer}
+                            />
                           </div>
                         ))}
                     </div>
@@ -644,9 +648,18 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                     <input
                       id="mailDomain"
                       type="text"
-                      value={createWorkspaceConfig?.company_email_domains?.join(
-                        ", "
-                      )}
+                      value={(() => {
+                        switch (customer.company_name) {
+                          case "Amplitude":
+                            return "amplitude.com";
+                          case "OpenAI":
+                            return "openai.com";
+                          case "Nike":
+                            return "nike.com";
+                          default:
+                            return "yopmail.com";
+                        }
+                      })()}
                       onChange={(e) => {
                         createWorkspaceConfig.company_email_domains =
                           e.target.value.split(", ");
@@ -797,7 +810,7 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                     src={clickthroughUrl}
                     className="w-full h-[500px] border-0"
                   />
-                  <div className="flex justify-end">
+                  <div className="flex justify-end mt-3">
                     <button
                       className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                       onClick={() => {
@@ -878,6 +891,14 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
                       >
                         View Clickthrough Demo
                       </button>
+                      <a
+                        href={CLICKTHROUGH_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-4 text-blue-600 hover:text-blue-700 transition-colors"
+                      >
+                        Open in new tab
+                      </a>
                     </div>
                   )}
 
@@ -918,6 +939,63 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
     </div>
   );
 }
+
+const Suggestions = ({
+  feature,
+  customer,
+}: {
+  feature: string;
+  customer: Customer;
+}) => {
+  const list = SUGGESTION_LIST.find(
+    (e) => e.company_name === customer.company_name
+  );
+  if (!list) return null;
+  const { template_list, tpp_list, verifai_list } = list;
+  if (feature === "Template Workflow") {
+    return (
+      <div className="flex flex-wrap items-center text-slate-600 text-xs">
+        (
+        {template_list.map((e, index) => (
+          <div key={e} className="mr-1">
+            {e}
+            {index < template_list.length - 1 && ","}
+          </div>
+        ))}
+        )
+      </div>
+    );
+  }
+  if (feature === "Third Party Paper Workflow") {
+    return (
+      <div className="flex flex-wrap items-center text-slate-600 text-xs">
+        (
+        {tpp_list.map((e, index) => (
+          <div key={e} className="mr-1">
+            {e}
+            {index < tpp_list.length - 1 && ","}
+          </div>
+        ))}
+        )
+      </div>
+    );
+  }
+  if (feature === "VerifAI") {
+    return (
+      <div className="flex flex-wrap items-center text-slate-600 text-xs">
+        (
+        {verifai_list.map((e, index) => (
+          <div key={e} className="mr-1">
+            {e}
+            {index < verifai_list.length - 1 && ","}
+          </div>
+        ))}
+        )
+      </div>
+    );
+  }
+  return null;
+};
 
 const getSuggestedProducts = (customer: Customer) => {
   const suggestions: ProductSuggestion[] = [];
