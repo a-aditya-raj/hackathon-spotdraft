@@ -1,8 +1,17 @@
 import { useState } from "react";
-import { TrendingUp, Eye, MousePointer, Clock, Activity } from "lucide-react";
+import {
+  TrendingUp,
+  Eye,
+  MousePointer,
+  Clock,
+  Activity,
+  BookOpen,
+} from "lucide-react";
+import { ContractGuidebookOverlay } from "./ContractGuidebookOverlay";
 
 export function InsightsDashboard() {
   const [selectedProspect, setSelectedProspect] = useState("paySprint");
+  const [showGuidebook, setShowGuidebook] = useState(false);
 
   const prospects = [
     {
@@ -87,6 +96,13 @@ export function InsightsDashboard() {
             </p>
           </div>
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setShowGuidebook(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Generate Guidebooks</span>
+            </button>
             <select
               value={selectedProspect}
               onChange={(e) => setSelectedProspect(e.target.value)}
@@ -313,6 +329,11 @@ export function InsightsDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Contract Guidebook Overlay */}
+      {showGuidebook && (
+        <ContractGuidebookOverlay onClose={() => setShowGuidebook(false)} />
+      )}
     </div>
   );
 }

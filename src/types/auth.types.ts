@@ -17,3 +17,12 @@ export interface AuthContextType extends AuthState {
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 }
+
+export interface DemoConfiguration {
+  company_name: string;
+  company_email_domains: string[];
+  invited_users: string[];
+  create_dummy_data: boolean;
+  demo_access_end_date: string;
+  feature_list: string[];
+}

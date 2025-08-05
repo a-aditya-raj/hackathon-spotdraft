@@ -121,6 +121,23 @@ export function ChatInterface({
                       className="bg-slate-50 border border-slate-200 rounded-xl p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-200 cursor-pointer group"
                     >
                       <div className="flex items-center space-x-3">
+                        {customer.company_logo?.logo &&
+                          customer.company_logo?.type === "image" && (
+                            <img
+                              src={customer.company_logo.logo}
+                              alt={customer.company_name}
+                              className="w-10 h-10 object-contain rounded-full"
+                            />
+                          )}
+                        {customer.company_logo?.logo &&
+                          customer.company_logo?.type === "svg" && (
+                            <div
+                              className="rounded-full"
+                              dangerouslySetInnerHTML={{
+                                __html: customer.company_logo.logo,
+                              }}
+                            />
+                          )}
                         <h3 className="font-medium text-slate-900 group-hover:text-blue-600 transition-colors truncate">
                           {customer.company_name}
                         </h3>

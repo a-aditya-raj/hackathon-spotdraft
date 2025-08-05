@@ -8,8 +8,13 @@ import { AuthProvider, useAuth } from "./context/auth.context";
 
 export interface Customer {
   company_name: string;
+  company_logo?: {
+    logo?: string;
+    type?: "svg" | "image";
+  };
   company_url?: string;
   mail_domain?: string;
+  summary?: string;
   pain_points: string[];
   features: {
     verify_ai: {
