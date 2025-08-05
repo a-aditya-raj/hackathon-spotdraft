@@ -235,11 +235,11 @@ export function CustomerAnalysis({ customer, onClose }: CustomerAnalysisProps) {
         .toISOString()
         .split("T")[0];
       createWorkspaceConfig.create_dummy_data = true;
-      const response = await createWorkspace(createWorkspaceConfig);
-      console.log(response);
+      createWorkspace(createWorkspaceConfig);
     } catch (error) {
       console.error(error);
     }
+    await new Promise((resolve) => setTimeout(resolve, 1*60*1000));
     setCreatingWorkspace(false);
     setCurrentStep("preview");
   };

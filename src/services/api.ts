@@ -231,11 +231,13 @@ export const CLICKTHROUGH_URL =
 export const WORKSPACE_URL = "http://localhost:4200/home";
 
 export const createWorkspace = async (config: DemoConfiguration) => {
-  const response = await fetch("http://localhost:8000/api/v1/workspaces", {
+  config.feature_list = [];
+  const response = await fetch("http://localhost:8000/sd_admin/v2/demo_accounts/moonshot_free_trial", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer `,
+      "Authorization": "Bearer 41529c4d99ecae05de696944013e4093dc087f3c",
+      "x-sd-workspace-id": "34805",
     },
     body: JSON.stringify(config),
   });
