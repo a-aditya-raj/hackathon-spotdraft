@@ -15,3 +15,24 @@ export const FEATURES = {
       "Clickthrough is a feature that allows you to manage your clickthrough.",
   },
 };
+
+export const SUGGESTION_LIST = [
+  {
+    company_name: "Amplitude",
+    template_list: ["DPA", "Order Form", "Technology Partner Agreement", "MSA"],
+    tpp_list: [],
+    verifai_list: ["Contract Metadata and Risk Guide"],
+  },
+  {
+    company_name: "OpenAI",
+    template_list: ["ESA", "API Agreement"],
+    tpp_list: [],
+    verifai_list: ["Contract Metadata and Risk Guide"],
+  },
+  {
+    company_name: "Nike",
+    template_list: [],
+    tpp_list: ["Supplier Contracts"],
+    verifai_list: ["Contract Metadata and Risk Guide"],
+  },
+];

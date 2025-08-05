@@ -10,7 +10,7 @@ export function ContractGuidebookOverlay({ onClose }: { onClose: () => void }) {
             <FileText className="w-6 h-6 text-blue-600" />
             <div>
               <h2 className="text-xl font-semibold text-slate-900">
-                Contract Review Guidebook
+                Contract Metadata and Risk Guide
               </h2>
               <p className="text-slate-500 text-sm">
                 Comprehensive checklist for contract analysis and review
